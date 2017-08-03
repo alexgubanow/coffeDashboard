@@ -73,6 +73,36 @@ var GridElem = React.createClass({
     }
 });
 
+function handleClickEditButton (event)
+{
+    $("#EditButton").toggleClass('hidden');
+    $("#DoneButton").toggleClass('hidden');
+    $("#AddButton").toggleClass('hidden');
+    $("#RemoveAllButton").toggleClass('hidden');
+    $("#LoadTestButton").toggleClass('hidden');
+};
+function handleClickDoneButton (event)
+{
+    $("#EditButton").toggleClass('hidden');
+    $("#DoneButton").toggleClass('hidden');
+    $("#AddButton").toggleClass('hidden');
+    $("#RemoveAllButton").toggleClass('hidden');
+    $("#LoadTestButton").toggleClass('hidden');
+};
+function handleClickAddButton (event)
+{
+    
+};
+function handleClickRemoveAllButton (event)
+{
+    
+};
+function handleClickLoadTestButton (event)
+{
+    
+};
+
+
 var AllContent = React.createClass({
     render: function() {
         var GridElems = elems.map(elem => <GridElem key={elem.id} image={elem.image} price={elem.price} name={elem.name}/>);         
@@ -80,11 +110,11 @@ var AllContent = React.createClass({
             <div>
                 <nav className="navbar navbar-default">
                     <div className="container-fluid">
-                    <button type="button" className="btn btn-default navbar-btn">Edit</button>
-                    <button type="button" className="btn btn-default navbar-btn hidden">Done</button>
-                    <button type="button" className="btn btn-default navbar-btn hidden">Add</button>
-                    <button type="button" className="btn btn-default navbar-btn hidden">Remove all</button>
-                    <button type="button" className="btn btn-default navbar-btn hidden">Load test arr</button>
+                    <button type="button" id="EditButton" className="btn btn-default navbar-btn" onClick={(e) => handleClickEditButton(e)}>Edit</button>
+                    <button type="button" id="DoneButton" className="btn btn-default navbar-btn hidden" onClick={(e) => handleClickDoneButton(e)}>Done</button>
+                    <button type="button" id="AddButton" className="btn btn-default navbar-btn hidden" onClick={(e) => handleClickDoneButton(e)}>Add</button>
+                    <button type="button" id="RemoveAllButton" className="btn btn-default navbar-btn hidden" onClick={(e) => handleClickDoneButton(e)}>Remove all</button>
+                    <button type="button" id="LoadTestButton" className="btn btn-default navbar-btn hidden" onClick={(e) => handleClickDoneButton(e)}>Load test arr</button>
                     </div>
                 </nav>
                 <div className="container-fluid">
