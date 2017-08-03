@@ -1,23 +1,4 @@
 /*trying to revive it*/
-var buttons = 
-[
-    {
-        id : 0,
-        text : "Edit",
-        isVisible : true
-    },
-    {
-        id : 1,
-        text : "Done",
-        isVisible : false
-    },
-    {
-        id : 2,
-        text : "Add",
-        isVisible : false
-    }
-];
-
 var elems = 
 [
     {
@@ -64,11 +45,6 @@ var elems =
     }
 ];
 
-var NavBarButton = React.createClass({
-    onClickCallback: function(event) {
-        
-    },
-    render: function() { return ( <button type="button" className="btn btn-default navbar-btn">{this.props.text}</button>); } });
 
 var GridElem = React.createClass({
     handleNewPrice: function(event) {
@@ -76,7 +52,8 @@ var GridElem = React.createClass({
     },
     render: function(props) {
         return (
-            <div className="well col-xs-12 col-sm-3" >
+            <div className="well col-xs-12 col-sm-3">
+            <button type="button" className="close hidden" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <ul className="list-unstyled">
                     <li><img src={this.props.image} className="img-thumbnail img-rounded" alt={this.props.name}/></li>
                     <li style={{'verticalAlign':'middle'}}>
@@ -86,19 +63,10 @@ var GridElem = React.createClass({
                         </div>
                         <div className="col-sm-6">
                         <span className="pull-right">{this.props.price}</span>
+                        <span className="pull-right hidden"><input type="text" className="form-control" value={this.props.price} onChange={this.handleNewPrice}/></span>
                         </div>
                         </div>
                     </li>
-                    <li>
-                    <div className="row">
-                    <div className="col-sm-6">
-                    <span className="pull-left">{this.props.name}</span>
-                    </div>
-                    <div className="col-sm-6">
-                    <span className=" pull-right"><input type="text" className="form-control" value={this.props.price} onChange={this.handleNewPrice}/></span>
-                    </div>
-                    </div>
-                </li>
                 </ul>            
             </div>
         );
@@ -107,15 +75,16 @@ var GridElem = React.createClass({
 
 var AllContent = React.createClass({
     render: function() {
-        var NavBarButtons = buttons.map(button => <NavBarButton key={button.id} text={button.text}/>);
         var GridElems = elems.map(elem => <GridElem key={elem.id} image={elem.image} price={elem.price} name={elem.name}/>);         
         return (
             <div>
                 <nav className="navbar navbar-default">
                     <div className="container-fluid">
                     <button type="button" className="btn btn-default navbar-btn">Edit</button>
-                    <button type="button" className="btn btn-default navbar-btn hidden">Add</button>
                     <button type="button" className="btn btn-default navbar-btn hidden">Done</button>
+                    <button type="button" className="btn btn-default navbar-btn hidden">Add</button>
+                    <button type="button" className="btn btn-default navbar-btn hidden">Remove all</button>
+                    <button type="button" className="btn btn-default navbar-btn hidden">Load test arr</button>
                     </div>
                 </nav>
                 <div className="container-fluid">
@@ -128,4 +97,4 @@ var AllContent = React.createClass({
     }
 });
 
-ReactDOM.render(<AllContent text="Hi))"/>, document.getElementById('contentSheet') );
+ReactDOM.render(<AllContent/>, document.getElementById('contentSheet') );
