@@ -1,0 +1,44 @@
+[
+    {
+        id : 0,
+        image : "img/1-milk.png",
+        price : 1,
+        name : "Espresso",
+        isEdit : false
+    },
+    {
+        id : 1,
+        image : "img/2-espresso.png",
+        price : 1.2,
+        name : "Espresso Macchiato",
+        isEdit : false
+    },
+    {
+        id : 2,
+        image : "img/3-steamed-milk.png",
+        price : 1.2,
+        name : "Espresso con Panna",
+        isEdit : false
+    },
+    {
+        id : 3,
+        image : "img/4-hot-water-espresso.png",
+        price : 1.2,
+        name : "Caffe Latte",
+        isEdit : false
+    },
+    {
+        id : 4,
+        image : "img/5-whipped-cream-milk-syrup-espresso.png",
+        price : 1.2,
+        name : "Flat White",
+        isEdit : false
+    },
+    {
+        id : 5,
+        image : "img/6-milk-foam-steamed.png",
+        price : 1.2,
+        name : "Caffe Breve",
+        isEdit : false
+    }
+]

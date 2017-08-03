@@ -45,12 +45,81 @@ var elems =
     }
 ];
 
+var Buttons = React.createClass({
+    getInitialState: function(){
+        return {
+            EditButtonIsEnable: true,
+            DoneButtonIsEnable: false,
+            AddButtonIsEnable: false,
+            RemoveAllButtonIsEnable: false,
+            LoadTestButtonIsEnable: false
+        }
+    },
+    handleClickEditButton: function(event)
+    {
+        this.setState( { 
+            EditButtonIsEnable: false,
+            DoneButtonIsEnable: true,
+            AddButtonIsEnable: true,
+            RemoveAllButtonIsEnable: true,
+            LoadTestButtonIsEnable: true
+         } );
+    },
+    handleClickDoneButton: function(event)
+    {
+        this.setState( { 
+            EditButtonIsEnable: true,
+            DoneButtonIsEnable: false,
+            AddButtonIsEnable: false,
+            RemoveAllButtonIsEnable: false,
+            LoadTestButtonIsEnable: false
+         } );
+    },
+    handleClickAddButton: function(event)
+    {
+
+    },
+    handleClickRemoveAllButton: function(event)
+    {
+        
+    },
+    handleClickLoadTestButton: function(event)
+    {
+        
+    },
+   render: function() {
+       return (
+        <div className="container-fluid">
+        <button type="button" id="EditButton" 
+        className={this.state.EditButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
+        onClick={this.handleClickEditButton}>Edit</button>
+
+        <button type="button" id="DoneButton" 
+        className={this.state.DoneButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
+        onClick={this.handleClickDoneButton}>Done</button>
+
+        <button type="button" id="AddButton" 
+        className={this.state.AddButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
+        onClick={this.handleClickAddButton}>Add</button>
+
+        <button type="button" id="RemoveAllButton" 
+        className={this.state.RemoveAllButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
+        onClick={this.handleClickRemoveAllButton}>Remove all</button>
+
+        <button type="button" id="LoadTestButton" 
+        className={this.state.LoadTestButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
+        onClick={this.handleClickLoadTestButton}>Load test arr</button>
+        </div>
+    );
+   }
+});
 
 var GridElem = React.createClass({
+     
     handleNewPrice: function(event) {
         
     },
-    render: function(props) {
+    render: function(image = "img/1-milk.png", price = 1, name = "Espresso", isEdit = false) {
         return (
             <div className="well col-xs-12 col-sm-3">
             <button type="button" className="close hidden" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -73,49 +142,14 @@ var GridElem = React.createClass({
     }
 });
 
-function handleClickEditButton (event)
-{
-    $("#EditButton").toggleClass("hidden");
-    $("#DoneButton").toggleClass("hidden");
-    $("#AddButton").toggleClass("hidden");
-    $("#RemoveAllButton").toggleClass("hidden");
-    $("#LoadTestButton").toggleClass("hidden");
-};
-function handleClickDoneButton (event)
-{
-    $("#EditButton").toggleClass("hidden");
-    $("#DoneButton").toggleClass("hidden");
-    $("#AddButton").toggleClass("hidden");
-    $("#RemoveAllButton").toggleClass("hidden");
-    $("#LoadTestButton").toggleClass("hidden");
-};
-function handleClickAddButton (event)
-{
-    
-};
-function handleClickRemoveAllButton (event)
-{
-    
-};
-function handleClickLoadTestButton (event)
-{
-    
-};
-
-
 var AllContent = React.createClass({
     render: function() {
         var GridElems = elems.map(elem => <GridElem key={elem.id} image={elem.image} price={elem.price} name={elem.name}/>);         
         return (
             <div>
+            <input id="fileInput" type="file"  className="hidden" />
                 <nav className="navbar navbar-default">
-                    <div className="container-fluid">
-                    <button type="button" id="EditButton" className="btn btn-default navbar-btn" onClick={(e) => handleClickEditButton(e)}>Edit</button>
-                    <button type="button" id="DoneButton" className="btn btn-default navbar-btn hidden" onClick={(e) => handleClickDoneButton(e)}>Done</button>
-                    <button type="button" id="AddButton" className="btn btn-default navbar-btn hidden" onClick={(e) => handleClickDoneButton(e)}>Add</button>
-                    <button type="button" id="RemoveAllButton" className="btn btn-default navbar-btn hidden" onClick={(e) => handleClickDoneButton(e)}>Remove all</button>
-                    <button type="button" id="LoadTestButton" className="btn btn-default navbar-btn hidden" onClick={(e) => handleClickDoneButton(e)}>Load test arr</button>
-                    </div>
+                    <Buttons/>
                 </nav>
                 <div className="container-fluid">
                 <div className="row">
