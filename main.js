@@ -92,23 +92,23 @@ var Buttons = React.createClass({
         <div className="container-fluid">
         <button type="button" id="EditButton" 
         className={this.state.EditButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
-        onClick={this.handleClickEditButton}>Edit</button>
+        onClick={el => this.handleClickEditButton(el)}>Edit</button>
 
         <button type="button" id="DoneButton" 
         className={this.state.DoneButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
-        onClick={this.handleClickDoneButton}>Done</button>
+        onClick={el => this.handleClickDoneButton(el)}>Done</button>
 
         <button type="button" id="AddButton" 
         className={this.state.AddButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
-        onClick={this.handleClickAddButton}>Add</button>
+        onClick={el => this.handleClickAddButton(el)}>Add</button>
 
         <button type="button" id="RemoveAllButton" 
         className={this.state.RemoveAllButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
-        onClick={this.handleClickRemoveAllButton}>Remove all</button>
+        onClick={el => this.handleClickRemoveAllButton(el)}>Remove all</button>
 
         <button type="button" id="LoadTestButton" 
         className={this.state.LoadTestButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
-        onClick={this.handleClickLoadTestButton}>Load test arr</button>
+        onClick={el => this.handleClickLoadTestButton(el)}>Load test arr</button>
         </div>
     );
    }
