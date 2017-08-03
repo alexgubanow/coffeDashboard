@@ -22,37 +22,37 @@ var elems =
 [
     {
         id : 0,
-        image : '',
+        image : 'img/1-milk.png',
         price : 1,
         name : 'Espresso'
     },
     {
         id : 1,
-        image : '',
+        image : 'img/2-espresso.png',
         price : 1.2,
         name : 'Espresso Macchiato',
     },
     {
         id : 2,
-        image : '',
+        image : 'img/3-steamed-milk.png',
         price : 1.2,
         name : 'Espresso con Panna',
     },
     {
         id : 3,
-        image : '',
+        image : 'img/4-hot-water-espresso.png',
         price : 1.2,
         name : 'Caffe Latte',
     },
     {
         id : 4,
-        image : '',
+        image : 'img/5-whipped-cream-milk-syrup-espresso.png',
         price : 1.2,
         name : 'Flat White',
     },
     {
         id : 5,
-        image : '',
+        image : 'img/6-milk-foam-steamed.png',
         price : 1.2,
         name : 'Caffe Breve',
     }
@@ -71,17 +71,36 @@ var NavBarButton = React.createClass({
 });
 
 var GridElem = React.createClass({
-    render: function() {
+    handleNewPrice: function(event) {
+        
+    },
+    render: function(props) {
         return (
-            // <div className="well col-xs-12 col-sm-3 col-md-3" >
-            //     <ul className="list-unstyled">
-            //         <li>{this.props.price}</li>
-            //         <li>{this.props.name}</li>
-            //     </ul>            
-            // </div>
-            <div className="well col-xs-12 col-sm-3 col-md-3" >
-            {this.props.text}           
-        </div>
+            <div className="well col-xs-12 col-sm-3" >
+                <ul className="list-unstyled">
+                    <li><img src={this.props.image} className="img-thumbnail img-rounded" alt={this.props.name}/></li>
+                    <li style={{'verticalAlign':'middle'}}>
+                        <div className="row">
+                        <div className="col-sm-6">
+                        <span className="pull-left">{this.props.name}</span>
+                        </div>
+                        <div className="col-sm-6">
+                        <span className="pull-right">{this.props.price}</span>
+                        </div>
+                        </div>
+                    </li>
+                    <li>
+                    <div className="row">
+                    <div className="col-sm-6">
+                    <span className="pull-left">{this.props.name}</span>
+                    </div>
+                    <div className="col-sm-6">
+                    <span className=" pull-right"><input type="text" className="form-control" value={this.props.price} onChange={this.handleNewPrice}/></span>
+                    </div>
+                    </div>
+                </li>
+                </ul>            
+            </div>
         );
     }
 });
@@ -89,7 +108,7 @@ var GridElem = React.createClass({
 var AllContent = React.createClass({
     render: function() {
         var NavBarButtons = buttons.map(button => <NavBarButton key={button.id} text={button.text}/>);
-        var GridElems = elems.map(elem => <GridElem key={elem.id} text={elem.text}/>);         
+        var GridElems = elems.map(elem => <GridElem key={elem.id} image={elem.image} price={elem.price} name={elem.name}/>);         
         return (
             <div>
                 <nav className="navbar navbar-default">
