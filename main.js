@@ -39,18 +39,21 @@ var TestItems =
     }
 ];
 
-var Buttons = React.createClass({
-    getInitialState: function(){
-        return {
-            EditButtonIsEnable: true,
-            DoneButtonIsEnable: false,
-            AddButtonIsEnable: false,
-            RemoveAllButtonIsEnable: false,
-            LoadTestButtonIsEnable: false
-        }
-    },
-    handleClickEditButton: function(event)
+class Buttons extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+          EditButtonIsEnable: true,
+          DoneButtonIsEnable: false,
+          AddButtonIsEnable: false,
+          RemoveAllButtonIsEnable: false,
+          LoadTestButtonIsEnable: false
+        };
+    }
+  
+    handleClickEditButton(e)
     {
+        this.props.onChangeisEdit(this.state.EditButtonIsEnable);
         this.setState( { 
             EditButtonIsEnable: false,
             DoneButtonIsEnable: true,
@@ -59,9 +62,10 @@ var Buttons = React.createClass({
             LoadTestButtonIsEnable: true
          } );
          
-    },
-    handleClickDoneButton: function(event)
+    };
+    handleClickDoneButton(e)
     {
+        this.props.onChangeisEdit(this.state.EditButtonIsEnable);
         this.setState( { 
             EditButtonIsEnable: true,
             DoneButtonIsEnable: false,
@@ -69,20 +73,20 @@ var Buttons = React.createClass({
             RemoveAllButtonIsEnable: false,
             LoadTestButtonIsEnable: false
          } );
-    },
-    handleClickAddButton: function(event)
+    };
+    handleClickAddButton(e)
     {
 
-    },
-    handleClickRemoveAllButton: function(event)
+    };
+    handleClickRemoveAllButton(e)
     {
         
-    },
-    handleClickLoadTestButton: function(event)
+    };
+    handleClickLoadTestButton(e)
     {
         
-    },
-   render: function() {
+    };
+   render() {
        return (
         <div className="container-fluid">
         <button type="button" id="EditButton" 
@@ -107,83 +111,106 @@ var Buttons = React.createClass({
         </div>
     );
    }
-});
+  }
 
-var GridElem = React.createClass({
-    getInitialState: function() {
-        return {
-            price : this.props.price
+  class GridElem extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+          price : this.props.price
         };
-    },
-    handleRemoveItem: function(event) {
-        console.log(this.props.name);
-    },
-    handleNewPrice: function(event) {
+    }
+    handleRemoveItem(e) {
+        this.props.onRemove(e);
+    }
+    handleNewPrice(e) {
         this.setState( { 
-            price: document.getElementById(event.target.getAttribute("id")).value
+            price: document.getElementById(e.target.getAttribute("id")).value
          } );
-    },
-    handleClickSavePrice: function(event)
+    }
+    handleClickSavePrice(e)
     {
         
-    },
-    render: function(image = "img/1-milk.png", price = 1, name = "Espresso", isEdit = false) {
-        return (
-            <div className="well col-xs-12 col-sm-3">
-            <button type="button" 
-            className={this.props.isEdit ? "close" :"close hidden"} id={"closeBtn" + this.props.id} 
-             aria-label="Close" onClick={el => this.handleRemoveItem(el)}><span aria-hidden="true">&times;</span></button>
-                <ul className="list-unstyled">
-                    <li><img src={this.props.image} className="img-thumbnail img-rounded" alt={this.props.name}/></li>
-                    <li style={{"verticalAlign":"middle"}}>
-                        <div className="row">
-                        <div className="col-sm-6">
-                        <span className="pull-left">{this.props.name}</span>
-                        </div>
-                        <div className="col-sm-6">
-                        <span className={this.props.isEdit ? "pull-right hidden" : "pull-right"}>{this.state.price}</span>
-                        <span className={this.props.isEdit ? "pull-right" :"pull-right hidden"}>
-                            <input type="text" 
-                            id={"priceInput" + this.props.id} 
-                            className="form-control" value={this.state.price} 
-                            onChange={el => this.handleNewPrice(el)}
-                            onClick={el => this.handleClickSavePrice(el)}/></span>
-                        </div>
-                        </div>
-                    </li>
-                </ul>            
-            </div>
-        );
     }
-});
-
-var GridElems = React.createClass({
-    getInitialState: function() {
-        return {
-            displayedItems: TestItems,
-            isEdit : true
-        };
-    },
-    enterInEdit: function(event) {
-        console.log(event);
-    },
-    render: function() {
+   render() {
+       return (
+        <div className="well col-xs-12 col-sm-3">
+        <button type="button" className={this.props.isEdit ? "close" :"close hidden"} 
+         aria-label="Close" onClick={el => this.handleRemoveItem(el)}>
+         <span id={"closeBtn" + this.props.id} aria-hidden="true">&times;</span></button>
+            <ul className="list-unstyled">
+                <li><img src={this.props.image} className="img-thumbnail img-rounded" alt={this.props.name}/></li>
+                <li style={{"verticalAlign":"middle"}}>
+                    <div className="row">
+                    <div className="col-sm-6">
+                    <span className="pull-left">{this.props.name}</span>
+                    </div>
+                    <div className="col-sm-6">
+                    <span className={this.props.isEdit ? "pull-right hidden" : "pull-right"}>{this.state.price}</span>
+                    <span className={this.props.isEdit ? "pull-right" :"pull-right hidden"}>
+                        <input type="text" 
+                        id={"priceInput" + this.props.id} 
+                        className="form-control" value={this.state.price} 
+                        onChange={el => this.handleNewPrice(el)}
+                        onClick={el => this.handleClickSavePrice(el)}/></span>
+                    </div>
+                    </div>
+                </li>
+            </ul>            
+        </div>
+    );
+   }
+  }
+class GridElems extends React.Component {
+    constructor(props) {
+      super(props);
+      this.RemoveItem = this.RemoveItem.bind(this);
+      this.state = {
+        displayedItems: TestItems
+      };
+    }
+    RemoveItem(item) {
+        var idToRemove = item.target.getAttribute("id").replace("closeBtn","");
+        var displayedItems = TestItems.filter(item => item.id != idToRemove);
+        TestItems = displayedItems;//need to save on disk
+        this.setState({
+            displayedItems: displayedItems
+        });
+    }
+    
+    render() {
         return (
             <div className="container-fluid">
             <div className="row">
                 {this.state.displayedItems.map(elem => 
-                    <GridElem key={elem.id} id={elem.id} image={elem.image} price={elem.price} name={elem.name} isEdit={this.state.isEdit}/>)}
+                    <GridElem key={elem.id} onRemove={this.RemoveItem} id={elem.id} image={elem.image} price={elem.price} name={elem.name} isEdit={this.props.isEdit} onChange={this.handleChange}/>)}
             </div>
         </div>
         );
     }
-});
+  }
+class AllContent extends React.Component {
+    constructor(props) {
+      super(props);
+      this.handleisEdit = this.handleisEdit.bind(this);
+      this.state = {isEdit: false};
+    }
 
-ReactDOM.render(
-    <div>
-    <input id="fileInput" type="file"  className="hidden" />
-        <nav className="navbar navbar-default">
-            <Buttons/>
-        </nav>
-        <GridElems/>
-    </div>, document.getElementById("contentSheet") );
+    handleisEdit(currState) {
+      this.setState({isEdit: currState});
+    }  
+  
+    render() {
+      return (
+        <div>
+        <input id="fileInput" type="file"  className="hidden" />
+            <nav className="navbar navbar-default">
+                <Buttons onChangeisEdit={this.handleisEdit}/>
+            </nav>
+            <GridElems isEdit={this.state.isEdit}/>
+        </div>
+      );
+    }
+  }
+
+ReactDOM.render(<AllContent/>, document.getElementById("contentSheet") );
