@@ -1,47 +1,41 @@
 /*trying to revive it*/
-var elems = 
+var TestItems = 
 [
     {
         id : 0,
         image : "img/1-milk.png",
         price : 1,
-        name : "Espresso",
-        isEdit : false
+        name : "Espresso"
     },
     {
         id : 1,
         image : "img/2-espresso.png",
         price : 1.2,
-        name : "Espresso Macchiato",
-        isEdit : false
+        name : "Espresso Macchiato"
     },
     {
         id : 2,
         image : "img/3-steamed-milk.png",
         price : 1.2,
-        name : "Espresso con Panna",
-        isEdit : false
+        name : "Espresso con Panna"
     },
     {
         id : 3,
         image : "img/4-hot-water-espresso.png",
         price : 1.2,
-        name : "Caffe Latte",
-        isEdit : false
+        name : "Caffe Latte"
     },
     {
         id : 4,
         image : "img/5-whipped-cream-milk-syrup-espresso.png",
         price : 1.2,
-        name : "Flat White",
-        isEdit : false
+        name : "Flat White"
     },
     {
         id : 5,
         image : "img/6-milk-foam-steamed.png",
         price : 1.2,
-        name : "Caffe Breve",
-        isEdit : false
+        name : "Caffe Breve"
     }
 ];
 
@@ -64,6 +58,7 @@ var Buttons = React.createClass({
             RemoveAllButtonIsEnable: true,
             LoadTestButtonIsEnable: true
          } );
+         
     },
     handleClickDoneButton: function(event)
     {
@@ -115,14 +110,29 @@ var Buttons = React.createClass({
 });
 
 var GridElem = React.createClass({
-     
+    getInitialState: function() {
+        return {
+            price : this.props.price
+        };
+    },
+    handleRemoveItem: function(event) {
+        console.log(this.props.name);
+    },
     handleNewPrice: function(event) {
+        this.setState( { 
+            price: document.getElementById(event.target.getAttribute("id")).value
+         } );
+    },
+    handleClickSavePrice: function(event)
+    {
         
     },
     render: function(image = "img/1-milk.png", price = 1, name = "Espresso", isEdit = false) {
         return (
             <div className="well col-xs-12 col-sm-3">
-            <button type="button" className="close hidden" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" 
+            className={this.props.isEdit ? "close" :"close hidden"} id={"closeBtn" + this.props.id} 
+             aria-label="Close" onClick={el => this.handleRemoveItem(el)}><span aria-hidden="true">&times;</span></button>
                 <ul className="list-unstyled">
                     <li><img src={this.props.image} className="img-thumbnail img-rounded" alt={this.props.name}/></li>
                     <li style={{"verticalAlign":"middle"}}>
@@ -131,8 +141,13 @@ var GridElem = React.createClass({
                         <span className="pull-left">{this.props.name}</span>
                         </div>
                         <div className="col-sm-6">
-                        <span className="pull-right">{this.props.price}</span>
-                        <span className="pull-right hidden"><input type="text" className="form-control" value={this.props.price} onChange={this.handleNewPrice}/></span>
+                        <span className={this.props.isEdit ? "pull-right hidden" : "pull-right"}>{this.state.price}</span>
+                        <span className={this.props.isEdit ? "pull-right" :"pull-right hidden"}>
+                            <input type="text" 
+                            id={"priceInput" + this.props.id} 
+                            className="form-control" value={this.state.price} 
+                            onChange={el => this.handleNewPrice(el)}
+                            onClick={el => this.handleClickSavePrice(el)}/></span>
                         </div>
                         </div>
                     </li>
@@ -142,23 +157,33 @@ var GridElem = React.createClass({
     }
 });
 
-var AllContent = React.createClass({
+var GridElems = React.createClass({
+    getInitialState: function() {
+        return {
+            displayedItems: TestItems,
+            isEdit : true
+        };
+    },
+    enterInEdit: function(event) {
+        console.log(event);
+    },
     render: function() {
-        var GridElems = elems.map(elem => <GridElem key={elem.id} image={elem.image} price={elem.price} name={elem.name}/>);         
         return (
-            <div>
-            <input id="fileInput" type="file"  className="hidden" />
-                <nav className="navbar navbar-default">
-                    <Buttons/>
-                </nav>
-                <div className="container-fluid">
-                <div className="row">
-                    {GridElems}
-                </div>
+            <div className="container-fluid">
+            <div className="row">
+                {this.state.displayedItems.map(elem => 
+                    <GridElem key={elem.id} id={elem.id} image={elem.image} price={elem.price} name={elem.name} isEdit={this.state.isEdit}/>)}
             </div>
-          </div>
+        </div>
         );
     }
 });
 
-ReactDOM.render(<AllContent/>, document.getElementById("contentSheet") );
+ReactDOM.render(
+    <div>
+    <input id="fileInput" type="file"  className="hidden" />
+        <nav className="navbar navbar-default">
+            <Buttons/>
+        </nav>
+        <GridElems/>
+    </div>, document.getElementById("contentSheet") );
