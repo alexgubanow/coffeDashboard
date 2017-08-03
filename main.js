@@ -3,44 +3,44 @@ var elems =
 [
     {
         id : 0,
-        image : 'img/1-milk.png',
+        image : "img/1-milk.png",
         price : 1,
-        name : 'Espresso',
+        name : "Espresso",
         isEdit : false
     },
     {
         id : 1,
-        image : 'img/2-espresso.png',
+        image : "img/2-espresso.png",
         price : 1.2,
-        name : 'Espresso Macchiato',
+        name : "Espresso Macchiato",
         isEdit : false
     },
     {
         id : 2,
-        image : 'img/3-steamed-milk.png',
+        image : "img/3-steamed-milk.png",
         price : 1.2,
-        name : 'Espresso con Panna',
+        name : "Espresso con Panna",
         isEdit : false
     },
     {
         id : 3,
-        image : 'img/4-hot-water-espresso.png',
+        image : "img/4-hot-water-espresso.png",
         price : 1.2,
-        name : 'Caffe Latte',
+        name : "Caffe Latte",
         isEdit : false
     },
     {
         id : 4,
-        image : 'img/5-whipped-cream-milk-syrup-espresso.png',
+        image : "img/5-whipped-cream-milk-syrup-espresso.png",
         price : 1.2,
-        name : 'Flat White',
+        name : "Flat White",
         isEdit : false
     },
     {
         id : 5,
-        image : 'img/6-milk-foam-steamed.png',
+        image : "img/6-milk-foam-steamed.png",
         price : 1.2,
-        name : 'Caffe Breve',
+        name : "Caffe Breve",
         isEdit : false
     }
 ];
@@ -56,7 +56,7 @@ var GridElem = React.createClass({
             <button type="button" className="close hidden" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <ul className="list-unstyled">
                     <li><img src={this.props.image} className="img-thumbnail img-rounded" alt={this.props.name}/></li>
-                    <li style={{'verticalAlign':'middle'}}>
+                    <li style={{"verticalAlign":"middle"}}>
                         <div className="row">
                         <div className="col-sm-6">
                         <span className="pull-left">{this.props.name}</span>
@@ -75,19 +75,19 @@ var GridElem = React.createClass({
 
 function handleClickEditButton (event)
 {
-    $("#EditButton").toggleClass('hidden');
-    $("#DoneButton").toggleClass('hidden');
-    $("#AddButton").toggleClass('hidden');
-    $("#RemoveAllButton").toggleClass('hidden');
-    $("#LoadTestButton").toggleClass('hidden');
+    $("#EditButton").toggleClass("hidden");
+    $("#DoneButton").toggleClass("hidden");
+    $("#AddButton").toggleClass("hidden");
+    $("#RemoveAllButton").toggleClass("hidden");
+    $("#LoadTestButton").toggleClass("hidden");
 };
 function handleClickDoneButton (event)
 {
-    $("#EditButton").toggleClass('hidden');
-    $("#DoneButton").toggleClass('hidden');
-    $("#AddButton").toggleClass('hidden');
-    $("#RemoveAllButton").toggleClass('hidden');
-    $("#LoadTestButton").toggleClass('hidden');
+    $("#EditButton").toggleClass("hidden");
+    $("#DoneButton").toggleClass("hidden");
+    $("#AddButton").toggleClass("hidden");
+    $("#RemoveAllButton").toggleClass("hidden");
+    $("#LoadTestButton").toggleClass("hidden");
 };
 function handleClickAddButton (event)
 {
@@ -127,4 +127,4 @@ var AllContent = React.createClass({
     }
 });
 
-ReactDOM.render(<AllContent/>, document.getElementById('contentSheet') );
+ReactDOM.render(<AllContent/>, document.getElementById("contentSheet") );
