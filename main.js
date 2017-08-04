@@ -74,17 +74,14 @@ class Buttons extends React.Component {
             LoadTestButtonIsEnable: false
          } );
     };
-    handleClickAddItemButton(e)
-    {
-        this.props.onAddItem(e);
-    };
     handleClickRemoveAllButton(e)
     {
         this.props.onRemoveAll(true);
     };
     handleClickLoadTestButton(e)
     {
-        
+        window.sessionStorage.clear();
+        window.location.reload();
     };
    render() {
        return (
@@ -97,9 +94,9 @@ class Buttons extends React.Component {
         className={this.state.DoneButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
         onClick={el => this.handleClickDoneButton(el)}>Done</button>
 
-        <button type="button" id="AddItemButton"  style={{'marginRight': '5px'}}
+        <button type="button" id="AddItemButton"  style={{'marginRight': '5px'}}  data-toggle="modal" data-target="#AddItemFormModal"
         className={this.state.AddItemButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
-        onClick={el => this.handleClickAddItemButton(el)}>Add</button>
+        >Add</button>
 
         <button type="button" id="RemoveAllButton"  style={{'marginRight': '5px'}}
         className={this.state.RemoveAllButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
@@ -113,6 +110,33 @@ class Buttons extends React.Component {
    }
   }
 
+  class AddItemForm extends React.Component {
+    constructor(props) {
+      super(props);
+    }
+   render() {
+       return (
+        <div id="AddItemFormModal" className={"modal fade"}>
+        <div className="modal-dialog">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 className="modal-title">Confirmation</h4>
+                </div>
+                <div className="modal-body">
+                    <p>Do you want to save changes you made to document before closing?</p>
+                    <p className="text-warning"><small>If you don't save, your changes will be lost.</small></p>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" className="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    );
+   }
+  }
   class GridElem extends React.Component {
     constructor(props) {
       super(props);
@@ -254,19 +278,16 @@ class AllContent extends React.Component {
     constructor(props) {
       super(props);
       this.handleisEdit = this.handleisEdit.bind(this);
-      this.AddItem = this.AddItem.bind(this);
       this.RemoveAll = this.RemoveAll.bind(this);
       this.state = {
         isEdit: false,
+        isAddItem: false,
         isRemoveAll: false
         };
     }
 
     handleisEdit(currState) {
       this.setState({isEdit: currState});
-    }  
-    AddItem(e) {
-        console.log(e);
     }  
     RemoveAll(currState) {
         this.setState({isRemoveAll: currState});
@@ -276,8 +297,9 @@ class AllContent extends React.Component {
       return (
         <div>
         <input id="fileInput" type="file"  className="hidden" />
+        <AddItemForm isEnable={this.state.isAddItem}/>
             <nav className="navbar navbar-default">
-                <Buttons onChangeisEdit={this.handleisEdit} onAddItem={this.AddItem} onRemoveAll={this.RemoveAll} />
+                <Buttons onChangeisEdit={this.handleisEdit} onRemoveAll={this.RemoveAll} />
             </nav>
             <GridElems isEdit={this.state.isEdit} isRemoveAll={this.state.isRemoveAll}/>
         </div>
