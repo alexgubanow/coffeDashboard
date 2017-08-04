@@ -196,7 +196,6 @@ class GridElems extends React.Component {
     }
 
     NewPrice(item) {
-        //console.log(item.target.getAttribute("id").replace("priceInput",''));
         var displayedItems = this.state.displayedItems.map(el => {
             if (el.id == item.target.getAttribute("id").replace("priceInput",''))
                 {
@@ -209,7 +208,6 @@ class GridElems extends React.Component {
                     return {id : el.id, image : el.image, price : el.price, name : el.name}
                 }
         });
-        console.log(displayedItems);
         this.setState({
             displayedItems: displayedItems
         });
