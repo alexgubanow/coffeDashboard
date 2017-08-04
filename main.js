@@ -129,13 +129,6 @@ class Buttons extends React.Component {
             price: document.getElementById(e.target.getAttribute("id")).value
          } );
     }
-    handleClickSavePrice(e)
-    {
-        // this.setState( { 
-        //     price: document.getElementById(e.target.getAttribute("id")).value
-        //  } );
-        // console.log(this.state.price);
-    }
    render() {
        return (
         <div className="col-xs-12 col-sm-3">
@@ -153,7 +146,7 @@ class Buttons extends React.Component {
                            <p className={this.props.isEdit ? "form-control-static pull-right hidden" :"form-control-static pull-right"}>{this.state.price} EUR</p>
                            <input type="text" id={"priceInput" + this.props.id}
                            className={this.props.isEdit ? "form-control pull-right":"form-control pull-right hidden"} value={this.state.price} 
-                           onChange={el => this.handleNewPrice(el)} onKeyDown ={el => {if(el.key == 'Enter') { this.handleClickSavePrice(el)}}}/>
+                           onChange={el => this.handleNewPrice(el)}/>
                        </div>
                    </div>
                </li>
