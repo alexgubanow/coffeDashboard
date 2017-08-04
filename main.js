@@ -2,39 +2,39 @@
 var TestItems = 
 [
     {
-        id : 0,
+        id : "itemCoffee0",
         image : "img/1-milk.png",
-        price : 1,
+        price : "1",
         name : "Espresso"
     },
     {
-        id : 1,
+        id : "itemCoffee1",
         image : "img/2-espresso.png",
-        price : 1.2,
+        price : "1.2",
         name : "Espresso Macchiato"
     },
     {
-        id : 2,
+        id : "itemCoffee2",
         image : "img/3-steamed-milk.png",
-        price : 1.2,
+        price : "1.2",
         name : "Espresso con Panna"
     },
     {
-        id : 3,
+        id : "itemCoffee3",
         image : "img/4-hot-water-espresso.png",
-        price : 1.2,
+        price : "1.2",
         name : "Caffe Latte"
     },
     {
-        id : 4,
+        id : "itemCoffee4",
         image : "img/5-whipped-cream-milk-syrup-espresso.png",
-        price : 1.2,
+        price : "1.2",
         name : "Flat White"
     },
     {
-        id : 5,
+        id : "itemCoffee5",
         image : "img/6-milk-foam-steamed.png",
-        price : 1.2,
+        price : "1.2",
         name : "Caffe Breve"
     }
 ];
@@ -134,25 +134,27 @@ class Buttons extends React.Component {
     }
    render() {
        return (
-        <div className="well col-xs-12 col-sm-3" style={{'marginRight': '20px'}}>
+        <div className="col-xs-12 col-sm-3">
+        <div className="well">
         <button type="button" className={this.props.isEdit ? "close" :"close hidden"} 
-         aria-label="Close" onClick={el => this.handleRemoveItem(el)}>
-         <span id={"closeBtn" + this.props.id} aria-hidden="true">&times;</span></button>
-            <ul className="list-unstyled">
-                <li><img src={this.props.image} className="img-thumbnail img-rounded" style={{'marginBottom': '10px'}} alt={this.props.name}/></li>
-                <li style={{"verticalAlign":"middle"}}>
-                    <div className="row">
-                        <div className="col-sm-6">
-                        <p className="form-control-static">{this.props.name}</p></div>
-                        <div className="col-sm-6">
-                            <p className={this.props.isEdit ? "form-control-static pull-right hidden" :"form-control-static pull-right"}>{this.state.price} EUR</p>
-                            <input type="text" id={"priceInput" + this.props.id}
-                            className={this.props.isEdit ? "form-control pull-right":"form-control pull-right hidden"} value={this.state.price} 
-                            onChange={el => this.handleNewPrice(el)} onClick={el => this.handleClickSavePrice(el)}/>
-                        </div>
-                    </div>
-                </li>
-            </ul>            
+        aria-label="Close" onClick={el => this.handleRemoveItem(el)}>
+        <span id={"closeBtn" + this.props.id} aria-hidden="true">&times;</span></button>
+           <ul className="list-unstyled">
+               <li><img src={this.props.image} className="img-thumbnail img-rounded" style={{'marginBottom': '10px'}} alt={this.props.name}/></li>
+               <li style={{"verticalAlign":"middle"}}>
+                   <div className="row">
+                       <div className="col-sm-6">
+                       <p className="form-control-static">{this.props.name}</p></div>
+                       <div className="col-sm-6">
+                           <p className={this.props.isEdit ? "form-control-static pull-right hidden" :"form-control-static pull-right"}>{this.state.price} EUR</p>
+                           <input type="text" id={"priceInput" + this.props.id}
+                           className={this.props.isEdit ? "form-control pull-right":"form-control pull-right hidden"} value={this.state.price} 
+                           onChange={el => this.handleNewPrice(el)} onClick={el => this.handleClickSavePrice(el)}/>
+                       </div>
+                   </div>
+               </li>
+           </ul>
+        </div>            
         </div>
     );
    }
@@ -160,17 +162,47 @@ class Buttons extends React.Component {
 class GridElems extends React.Component {
     constructor(props) {
       super(props);
-      this.RemoveItem = this.RemoveItem.bind(this);
-      this.state = {
-        displayedItems: TestItems
-      };
+      this.RemoveItem = this.RemoveItem.bind(this);      
+      var indexStr = window.sessionStorage.getItem("indexStr");
+      if(indexStr == null)
+        {
+            var indexArr = TestItems.map(el => el.id);
+            window.sessionStorage.setItem("indexStr", JSON.stringify(indexArr));
+            TestItems.map(el => window.sessionStorage.setItem(el.id, (el.id +':'+ el.image +':'+ el.price +':'+ el.name)));
+            this.state = {
+              displayedItems: TestItems,
+              indexArr : indexArr
+            };
+        }
+        else
+        {
+            var indexArr = JSON.parse(indexStr);
+            var displayedItems = indexArr.map(el => 
+                {
+                    var currItem = window.sessionStorage.getItem(el).split(':');
+                    return {id : currItem[0], image : currItem[1], price : currItem[2], name : currItem[3]};
+                }
+            );
+            this.state = {
+              displayedItems: displayedItems,
+              indexArr : indexArr
+            };
+        }
     }
+
+    componentWillMount()
+    {
+    }
+
     RemoveItem(item) {
         var idToRemove = item.target.getAttribute("id").replace("closeBtn","");
-        var displayedItems = TestItems.filter(item => item.id != idToRemove);
-        TestItems = displayedItems;//need to save on disk
+        var displayedItems = this.state.displayedItems.filter(item => item.id != idToRemove);
+        var indexArr = this.state.indexArr.filter(item => item != idToRemove);
+        window.sessionStorage.removeItem(idToRemove);
+        window.sessionStorage.setItem("indexStr", JSON.stringify(indexArr));
         this.setState({
-            displayedItems: displayedItems
+            displayedItems: displayedItems,
+            indexArr : indexArr
         });
     }
     
