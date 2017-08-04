@@ -62,7 +62,7 @@ class Buttons extends React.Component {
             LoadTestButtonIsEnable: true
          } );
          
-    };
+    }
     handleClickDoneButton(e)
     {
         this.props.onChangeisEdit(this.state.EditButtonIsEnable);
@@ -73,16 +73,16 @@ class Buttons extends React.Component {
             RemoveAllButtonIsEnable: false,
             LoadTestButtonIsEnable: false
          } );
-    };
+    }
     handleClickRemoveAllButton(e)
     {
         this.props.onRemoveAll(true);
-    };
+    }
     handleClickLoadTestButton(e)
     {
         window.sessionStorage.clear();
         window.location.reload();
-    };
+    }
    render() {
        return (
         <div className="container-fluid">
@@ -133,24 +133,24 @@ class Buttons extends React.Component {
     handleimageInputAddItem(e)
     {
         this.setState( { 
-            imageInputValue: document.getElementById(e.target.getAttribute("id")).value
+            imageInputValue: e.target.value
          } );
          
-    };
+    }
     handlepriceInputAddItem(e)
     {
         this.setState( { 
-            priceInputValue: document.getElementById(e.target.getAttribute("id")).value
+            priceInputValue: e.target.value
          } );
          
-    };
+    }
     handlenameInputAddItem(e)
     {
         this.setState( { 
-            nameInputValue: document.getElementById(e.target.getAttribute("id")).value
+            nameInputValue: e.target.value
          } );
          
-    };
+    }
     render() {
        return (
         <div id="AddItemFormModal" className={"modal fade"}>
@@ -209,7 +209,7 @@ class Buttons extends React.Component {
     handleNewPrice(e) {
         this.props.onNewPrice(e);
         this.setState( { 
-            price: document.getElementById(e.target.getAttribute("id")).value
+            price: e.target.value
          } );
     }
    render() {
@@ -295,7 +295,7 @@ class GridElems extends React.Component {
         var displayedItems = this.state.displayedItems.map(el => {
             if (el.id == e.target.getAttribute("id").replace("priceInput",''))
                 {
-                    var price = document.getElementById(e.target.getAttribute("id")).value;
+                    var price = e.target.value;
                     window.sessionStorage.setItem(el.id, (el.id +':'+ el.image +':'+ price +':'+ el.name));
                     return {id : el.id, image : el.image, price : price, name : el.name}
                 }
@@ -376,7 +376,8 @@ class AllContent extends React.Component {
       return (
         <div>
         <input id="fileInput" type="file"  className="hidden" />
-        <AddItemForm onGetNewItem={(imgStr, priceStr, nameStr) => { this.childGridElems.GetNewItem(imgStr, priceStr, nameStr); }} />
+        <AddItemForm onGetNewItem={(imgStr, priceStr, nameStr) => 
+            { this.childGridElems.GetNewItem(imgStr, priceStr, nameStr); }} />
             <nav className="navbar navbar-default">
                 <Buttons onChangeisEdit={this.handleisEdit} onRemoveAll={this.RemoveAll} />
             </nav>
