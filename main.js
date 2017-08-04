@@ -249,7 +249,7 @@ class GridElems extends React.Component {
         {
             var indexArr = TestItems.map(el => el.id);
             window.sessionStorage.setItem("indexStr", JSON.stringify(indexArr));
-            TestItems.map(el => window.sessionStorage.setItem(el.id, (el.id +':'+ el.image +':'+ el.price +':'+ el.name)));
+            TestItems.map(el => window.sessionStorage.setItem(el.id, JSON.stringify([el.id, el.image, el.price, el.name])));
             this.state = {
               displayedItems: TestItems,
               indexArr : indexArr
@@ -260,7 +260,7 @@ class GridElems extends React.Component {
             var indexArr = JSON.parse(indexStr);
             var displayedItems = indexArr.map(el => 
                 {
-                    var currItem = window.sessionStorage.getItem(el).split(':');
+                    var currItem = JSON.parse(window.sessionStorage.getItem(el));
                     return {id : currItem[0], image : currItem[1], price : currItem[2], name : currItem[3]};
                 }
             );
@@ -272,7 +272,6 @@ class GridElems extends React.Component {
     }
 
     GetNewItem(imgStr, priceStr, nameStr) {
-        //this.setState({newItem: {image: imgStr, price : priceStr, name: nameStr}});
         var MaxIndex = 0;
         this.state.indexArr.map(el => {
             var currIndex = parseInt(el.replace("itemCoffee",''));
@@ -284,7 +283,7 @@ class GridElems extends React.Component {
         var displayedItems = this.state.displayedItems;
         displayedItems.push({id : newIndex, image: imgStr, price : priceStr, name: nameStr});
         window.sessionStorage.setItem("indexStr", JSON.stringify(indexArr));
-        displayedItems.map(el => window.sessionStorage.setItem(el.id, (el.id +':'+ el.image +':'+ el.price +':'+ el.name)));
+        displayedItems.map(el => window.sessionStorage.setItem(el.id, JSON.stringify([el.id, el.image, el.price, el.name])));
         this.setState({
             displayedItems: displayedItems,
             indexArr : indexArr
@@ -296,7 +295,7 @@ class GridElems extends React.Component {
             if (el.id == e.target.getAttribute("id").replace("priceInput",''))
                 {
                     var price = e.target.value;
-                    window.sessionStorage.setItem(el.id, (el.id +':'+ el.image +':'+ price +':'+ el.name));
+                    window.sessionStorage.setItem(el.id, JSON.stringify([el.id, el.image, el.price, el.name]));
                     return {id : el.id, image : el.image, price : price, name : el.name}
                 }
             else
