@@ -80,7 +80,7 @@ class Buttons extends React.Component {
     };
     handleClickRemoveAllButton(e)
     {
-        this.props.onRemoveAll(e);
+        this.props.onRemoveAll(true);
     };
     handleClickLoadTestButton(e)
     {
@@ -158,10 +158,8 @@ class Buttons extends React.Component {
   }
 class GridElems extends React.Component {
     constructor(props) {
-      super(props);   
+      super(props);
       this.NewPrice = this.NewPrice.bind(this); 
-      this.RemoveAll = this.RemoveAll.bind(this);          
-      this.AddItem = this.AddItem.bind(this); 
       this.RemoveItem = this.RemoveItem.bind(this);   
       var indexStr = window.sessionStorage.getItem("indexStr");
       if(indexStr == null)
@@ -207,11 +205,17 @@ class GridElems extends React.Component {
             displayedItems: displayedItems
         });
     }
-    RemoveAll(e) {
-        
-    }
-    AddItem(e) {
-        
+    
+    componentWillReceiveProps(newProps) {
+        if(newProps.isRemoveAll)
+            {
+                this.state.indexArr.map(el => window.sessionStorage.removeItem(el));
+                window.sessionStorage.setItem("indexStr", JSON.stringify([]));
+                this.setState({
+                    displayedItems: [],
+                    indexArr : []
+                });
+            }
     }
 
     RemoveItem(e) {
@@ -231,7 +235,16 @@ class GridElems extends React.Component {
             <div className="container-fluid">
             <div className="row" style={{'display': 'flex','display': '-webkit-flex','flexWrap': 'wrap'}}>
                 {this.state.displayedItems.map(elem => 
-                    <GridElem key={elem.id} onRemove={this.RemoveItem} onNewPrice={this.NewPrice} id={elem.id} image={elem.image} price={elem.price} name={elem.name} isEdit={this.props.isEdit} onChange={this.handleChange}/>)}
+                    <GridElem 
+                    key={elem.id} 
+                    onRemove={this.RemoveItem} 
+                    onNewPrice={this.NewPrice} 
+                    onChange={this.handleChange}
+                    id={elem.id} 
+                    image={elem.image} 
+                    price={elem.price} 
+                    name={elem.name} 
+                    isEdit={this.props.isEdit}/>)}
             </div>
         </div>
         );
@@ -241,21 +254,32 @@ class AllContent extends React.Component {
     constructor(props) {
       super(props);
       this.handleisEdit = this.handleisEdit.bind(this);
-      this.state = {isEdit: false};
+      this.AddItem = this.AddItem.bind(this);
+      this.RemoveAll = this.RemoveAll.bind(this);
+      this.state = {
+        isEdit: false,
+        isRemoveAll: false
+        };
     }
 
     handleisEdit(currState) {
       this.setState({isEdit: currState});
     }  
+    AddItem(e) {
+        console.log(e);
+    }  
+    RemoveAll(currState) {
+        this.setState({isRemoveAll: currState});
+    }
   
     render() {
       return (
         <div>
         <input id="fileInput" type="file"  className="hidden" />
             <nav className="navbar navbar-default">
-                <Buttons onChangeisEdit={this.handleisEdit}/>
+                <Buttons onChangeisEdit={this.handleisEdit} onAddItem={this.AddItem} onRemoveAll={this.RemoveAll} />
             </nav>
-            <GridElems isEdit={this.state.isEdit}/>
+            <GridElems isEdit={this.state.isEdit} isRemoveAll={this.state.isRemoveAll}/>
         </div>
       );
     }
