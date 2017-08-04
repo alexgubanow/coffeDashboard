@@ -113,23 +113,82 @@ class Buttons extends React.Component {
   class AddItemForm extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        imageInputValue: "",
+        priceInputValue : "",
+        nameInputValue : ""
+      };
     }
-   render() {
+
+    handleClickSaveButton(e)
+    {
+        this.props.onGetNewItem(this.state.imageInputValue,this.state.priceInputValue,this.state.nameInputValue);
+        this.setState( { 
+            imageInputValue: "",
+            priceInputValue : "",
+            nameInputValue : ""
+         } );
+        $('#AddItemFormModal').modal('hide');
+    }
+    handleimageInputAddItem(e)
+    {
+        this.setState( { 
+            imageInputValue: document.getElementById(e.target.getAttribute("id")).value
+         } );
+         
+    };
+    handlepriceInputAddItem(e)
+    {
+        this.setState( { 
+            priceInputValue: document.getElementById(e.target.getAttribute("id")).value
+         } );
+         
+    };
+    handlenameInputAddItem(e)
+    {
+        this.setState( { 
+            nameInputValue: document.getElementById(e.target.getAttribute("id")).value
+         } );
+         
+    };
+    render() {
        return (
         <div id="AddItemFormModal" className={"modal fade"}>
         <div className="modal-dialog">
             <div className="modal-content">
                 <div className="modal-header">
                     <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 className="modal-title">Confirmation</h4>
+                    <h4 className="modal-title">Add new coffee</h4>
                 </div>
                 <div className="modal-body">
-                    <p>Do you want to save changes you made to document before closing?</p>
-                    <p className="text-warning"><small>If you don't save, your changes will be lost.</small></p>
+                <ul className="list-unstyled">
+                <li>
+                    <div className="input-group">
+                        <span className="input-group-addon">url to image</span>
+                        <input id="imageInputAddItem" type="text" className="form-control" value={this.state.imageInputValue}
+                        onChange={el => this.handleimageInputAddItem(el)}/>
+                    </div>
+                </li>
+                <li>
+                    <div className="input-group">
+                        <span className="input-group-addon">price</span>
+                        <input id="priceInputAddItem" type="text" className="form-control" value={this.state.priceInputValue}
+                        onChange={el => this.handlepriceInputAddItem(el)}/>
+                    </div>
+                </li>
+                <li>
+                    <div className="input-group">
+                        <span className="input-group-addon">name</span>
+                        <input id="nameInputAddItem" type="text" className="form-control" value={this.state.nameInputValue}
+                        onChange={el => this.handlenameInputAddItem(el)}/>
+                    </div>
+                </li>
+                </ul>
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-primary">Save changes</button>
+                    <button type="button" className="btn btn-primary" 
+                    onClick={el => this.handleClickSaveButton(el)}>Save</button>
                 </div>
             </div>
         </div>
@@ -212,6 +271,26 @@ class GridElems extends React.Component {
         }
     }
 
+    GetNewItem(imgStr, priceStr, nameStr) {
+        //this.setState({newItem: {image: imgStr, price : priceStr, name: nameStr}});
+        var MaxIndex = 0;
+        this.state.indexArr.map(el => {
+            var currIndex = parseInt(el.replace("itemCoffee",''));
+            if (currIndex > MaxIndex) { MaxIndex = currIndex}
+        });
+        var newIndex = "itemCoffee" + MaxIndex + 1;
+        var indexArr = this.state.indexArr;
+        indexArr.push(newIndex);
+        var displayedItems = this.state.displayedItems;
+        displayedItems.push({id : newIndex, image: imgStr, price : priceStr, name: nameStr});
+        window.sessionStorage.setItem("indexStr", JSON.stringify(indexArr));
+        displayedItems.map(el => window.sessionStorage.setItem(el.id, (el.id +':'+ el.image +':'+ el.price +':'+ el.name)));
+        this.setState({
+            displayedItems: displayedItems,
+            indexArr : indexArr
+        });
+    }
+
     NewPrice(e) {
         var displayedItems = this.state.displayedItems.map(el => {
             if (el.id == e.target.getAttribute("id").replace("priceInput",''))
@@ -274,6 +353,7 @@ class GridElems extends React.Component {
         );
     }
   }
+  
 class AllContent extends React.Component {
     constructor(props) {
       super(props);
@@ -281,14 +361,13 @@ class AllContent extends React.Component {
       this.RemoveAll = this.RemoveAll.bind(this);
       this.state = {
         isEdit: false,
-        isAddItem: false,
         isRemoveAll: false
         };
     }
 
     handleisEdit(currState) {
       this.setState({isEdit: currState});
-    }  
+    }
     RemoveAll(currState) {
         this.setState({isRemoveAll: currState});
     }
@@ -297,11 +376,13 @@ class AllContent extends React.Component {
       return (
         <div>
         <input id="fileInput" type="file"  className="hidden" />
-        <AddItemForm isEnable={this.state.isAddItem}/>
+        <AddItemForm onGetNewItem={(imgStr, priceStr, nameStr) => { this.childGridElems.GetNewItem(imgStr, priceStr, nameStr); }} />
             <nav className="navbar navbar-default">
                 <Buttons onChangeisEdit={this.handleisEdit} onRemoveAll={this.RemoveAll} />
             </nav>
-            <GridElems isEdit={this.state.isEdit} isRemoveAll={this.state.isRemoveAll}/>
+            <GridElems ref={instance => { this.childGridElems = instance; }}
+             isEdit={this.state.isEdit} 
+             isRemoveAll={this.state.isRemoveAll}/>
         </div>
       );
     }
