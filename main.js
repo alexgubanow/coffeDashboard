@@ -124,13 +124,17 @@ class Buttons extends React.Component {
         this.props.onRemove(e);
     }
     handleNewPrice(e) {
+        this.props.onNewPrice(e);
         this.setState( { 
             price: document.getElementById(e.target.getAttribute("id")).value
          } );
     }
     handleClickSavePrice(e)
     {
-        
+        // this.setState( { 
+        //     price: document.getElementById(e.target.getAttribute("id")).value
+        //  } );
+        // console.log(this.state.price);
     }
    render() {
        return (
@@ -149,7 +153,7 @@ class Buttons extends React.Component {
                            <p className={this.props.isEdit ? "form-control-static pull-right hidden" :"form-control-static pull-right"}>{this.state.price} EUR</p>
                            <input type="text" id={"priceInput" + this.props.id}
                            className={this.props.isEdit ? "form-control pull-right":"form-control pull-right hidden"} value={this.state.price} 
-                           onChange={el => this.handleNewPrice(el)} onClick={el => this.handleClickSavePrice(el)}/>
+                           onChange={el => this.handleNewPrice(el)} onKeyDown ={el => {if(el.key == 'Enter') { this.handleClickSavePrice(el)}}}/>
                        </div>
                    </div>
                </li>
@@ -162,7 +166,8 @@ class Buttons extends React.Component {
 class GridElems extends React.Component {
     constructor(props) {
       super(props);
-      this.RemoveItem = this.RemoveItem.bind(this);      
+      this.RemoveItem = this.RemoveItem.bind(this);
+      this.NewPrice = this.NewPrice.bind(this);      
       var indexStr = window.sessionStorage.getItem("indexStr");
       if(indexStr == null)
         {
@@ -190,8 +195,24 @@ class GridElems extends React.Component {
         }
     }
 
-    componentWillMount()
-    {
+    NewPrice(item) {
+        //console.log(item.target.getAttribute("id").replace("priceInput",''));
+        var displayedItems = this.state.displayedItems.map(el => {
+            if (el.id == item.target.getAttribute("id").replace("priceInput",''))
+                {
+                    var price = document.getElementById(item.target.getAttribute("id")).value;
+                    window.sessionStorage.setItem(el.id, (el.id +':'+ el.image +':'+ price +':'+ el.name));
+                    return {id : el.id, image : el.image, price : price, name : el.name}
+                }
+            else
+                {
+                    return {id : el.id, image : el.image, price : el.price, name : el.name}
+                }
+        });
+        console.log(displayedItems);
+        this.setState({
+            displayedItems: displayedItems
+        });
     }
 
     RemoveItem(item) {
@@ -211,7 +232,7 @@ class GridElems extends React.Component {
             <div className="container-fluid">
             <div className="row" style={{'display': 'flex','display': '-webkit-flex','flexWrap': 'wrap'}}>
                 {this.state.displayedItems.map(elem => 
-                    <GridElem key={elem.id} onRemove={this.RemoveItem} id={elem.id} image={elem.image} price={elem.price} name={elem.name} isEdit={this.props.isEdit} onChange={this.handleChange}/>)}
+                    <GridElem key={elem.id} onRemove={this.RemoveItem} onNewPrice={this.NewPrice} id={elem.id} image={elem.image} price={elem.price} name={elem.name} isEdit={this.props.isEdit} onChange={this.handleChange}/>)}
             </div>
         </div>
         );
