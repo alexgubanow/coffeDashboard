@@ -45,7 +45,7 @@ class Buttons extends React.Component {
       this.state = {
           EditButtonIsEnable: true,
           DoneButtonIsEnable: false,
-          AddButtonIsEnable: false,
+          AddItemButtonIsEnable: false,
           RemoveAllButtonIsEnable: false,
           LoadTestButtonIsEnable: false
         };
@@ -57,7 +57,7 @@ class Buttons extends React.Component {
         this.setState( { 
             EditButtonIsEnable: false,
             DoneButtonIsEnable: true,
-            AddButtonIsEnable: true,
+            AddItemButtonIsEnable: true,
             RemoveAllButtonIsEnable: true,
             LoadTestButtonIsEnable: true
          } );
@@ -69,18 +69,18 @@ class Buttons extends React.Component {
         this.setState( { 
             EditButtonIsEnable: true,
             DoneButtonIsEnable: false,
-            AddButtonIsEnable: false,
+            AddItemButtonIsEnable: false,
             RemoveAllButtonIsEnable: false,
             LoadTestButtonIsEnable: false
          } );
     };
-    handleClickAddButton(e)
+    handleClickAddItemButton(e)
     {
-
+        this.props.onAddItem(e);
     };
     handleClickRemoveAllButton(e)
     {
-        
+        this.props.onRemoveAll(e);
     };
     handleClickLoadTestButton(e)
     {
@@ -97,9 +97,9 @@ class Buttons extends React.Component {
         className={this.state.DoneButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
         onClick={el => this.handleClickDoneButton(el)}>Done</button>
 
-        <button type="button" id="AddButton"  style={{'marginRight': '5px'}}
-        className={this.state.AddButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
-        onClick={el => this.handleClickAddButton(el)}>Add</button>
+        <button type="button" id="AddItemButton"  style={{'marginRight': '5px'}}
+        className={this.state.AddItemButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
+        onClick={el => this.handleClickAddItemButton(el)}>Add</button>
 
         <button type="button" id="RemoveAllButton"  style={{'marginRight': '5px'}}
         className={this.state.RemoveAllButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
@@ -158,9 +158,11 @@ class Buttons extends React.Component {
   }
 class GridElems extends React.Component {
     constructor(props) {
-      super(props);
-      this.RemoveItem = this.RemoveItem.bind(this);
-      this.NewPrice = this.NewPrice.bind(this);      
+      super(props);   
+      this.NewPrice = this.NewPrice.bind(this); 
+      this.RemoveAll = this.RemoveAll.bind(this);          
+      this.AddItem = this.AddItem.bind(this); 
+      this.RemoveItem = this.RemoveItem.bind(this);   
       var indexStr = window.sessionStorage.getItem("indexStr");
       if(indexStr == null)
         {
@@ -188,11 +190,11 @@ class GridElems extends React.Component {
         }
     }
 
-    NewPrice(item) {
+    NewPrice(e) {
         var displayedItems = this.state.displayedItems.map(el => {
-            if (el.id == item.target.getAttribute("id").replace("priceInput",''))
+            if (el.id == e.target.getAttribute("id").replace("priceInput",''))
                 {
-                    var price = document.getElementById(item.target.getAttribute("id")).value;
+                    var price = document.getElementById(e.target.getAttribute("id")).value;
                     window.sessionStorage.setItem(el.id, (el.id +':'+ el.image +':'+ price +':'+ el.name));
                     return {id : el.id, image : el.image, price : price, name : el.name}
                 }
@@ -205,11 +207,17 @@ class GridElems extends React.Component {
             displayedItems: displayedItems
         });
     }
+    RemoveAll(e) {
+        
+    }
+    AddItem(e) {
+        
+    }
 
-    RemoveItem(item) {
-        var idToRemove = item.target.getAttribute("id").replace("closeBtn","");
-        var displayedItems = this.state.displayedItems.filter(item => item.id != idToRemove);
-        var indexArr = this.state.indexArr.filter(item => item != idToRemove);
+    RemoveItem(e) {
+        var idToRemove = e.target.getAttribute("id").replace("closeBtn","");
+        var displayedItems = this.state.displayedItems.filter(el => el.id != idToRemove);
+        var indexArr = this.state.indexArr.filter(el => el != idToRemove);
         window.sessionStorage.removeItem(idToRemove);
         window.sessionStorage.setItem("indexStr", JSON.stringify(indexArr));
         this.setState({
