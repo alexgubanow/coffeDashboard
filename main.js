@@ -1,6 +1,5 @@
 
 var Modal = ReactBootstrap.Modal;
-var Button = ReactBootstrap.Button;
 /*trying to revive it*/
 var TestItems = 
 [
@@ -59,18 +58,28 @@ class ModalWin extends React.Component {
 
   handleClickSave(e)
   {
-      this.props.onGetNewItem(this.state.imageInputValue,this.state.priceInputValue,this.state.nameInputValue);
-      this.setState( { 
-          imageInputValue: "",
-          priceInputValue : "",
-          nameInputValue : "",
-          isShow : false
-       } );
+    var imgStr = this.state.imageInputValue;
+    var priceStr = this.state.priceInputValue;
+    var nameStr = this.state.nameInputValue;
+    this.setState( { 
+        imageInputValue: "",
+        priceInputValue : "",
+        nameInputValue : "",
+        isShow : false
+     } );
+     this.props.onClose(false);
+     this.props.onGetNewItem(this.state.imageInputValue,this.state.priceInputValue,this.state.nameInputValue);
       
   }
   handleClickClose()
   {
-      this.setState({isShow : false});
+    this.props.onClose(false);
+    this.setState( { 
+        imageInputValue: "",
+        priceInputValue : "",
+        nameInputValue : "",
+        isShow : false
+     } );
   }
   handleimageInputAddItem(e)
   {
@@ -117,8 +126,10 @@ class ModalWin extends React.Component {
           </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.handleClickClose}>Close</Button>
-            <Button onClick={this.handleClickSave}>Save</Button>
+          <button type="button" id="CloseButton"  style={{'marginRight': '5px'}}
+          className={"btn btn-default"} onClick={el => this.handleClickClose(el)}>Close</button>
+          <button type="button" id="SaveButton"  style={{'marginRight': '5px'}}
+          className={"btn btn-default"} onClick={el => this.handleClickSave(el)}>Save</button>
           </Modal.Footer>
         </Modal>
     );
@@ -159,13 +170,13 @@ class NavBarBS extends React.Component {
             LoadTestButtonIsEnable: false
          } );
     }
-    handleClickRemoveAllButton(e)
-    {
-        this.props.onRemoveAll(true);
-    }
     handleClickAddItem(e)
     {
         this.props.onAddItem(true);
+    }
+    handleClickRemoveAllButton(e)
+    {
+        this.props.onRemoveAll(true);
     }
     handleClickLoadTestButton(e)
     {
@@ -340,20 +351,12 @@ class GridElems extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-            <div className="row" style={{'display': 'flex','display': '-webkit-flex','flexWrap': 'wrap'}}>
-                {this.state.displayedItems.map(elem => 
-                    <GridElem 
-                    key={elem.id} 
-                    onRemove={this.RemoveItem} 
-                    onNewPrice={this.NewPrice} 
-                    onChange={this.handleChange}
-                    id={elem.id} 
-                    image={elem.image} 
-                    price={elem.price} 
-                    name={elem.name} 
-                    isEdit={this.props.isEdit}/>)}
+                <div className="row" style={{'display': 'flex','display': '-webkit-flex','flexWrap': 'wrap'}}>
+                    {this.state.displayedItems.map(elem => 
+                        <GridElem key={elem.id} onRemove={this.RemoveItem} onNewPrice={this.NewPrice} onChange={this.handleChange}
+                            id={elem.id} image={elem.image} price={elem.price} name={elem.name} isEdit={this.props.isEdit}/>)}
+                </div>
             </div>
-        </div>
         );
     }
   }
@@ -376,7 +379,6 @@ class AllContent extends React.Component {
     }
     handleAddItem(currState) {
         this.setState({showModal: currState});
-        console.log("showModal " + this.state.showModal);
     }
     RemoveAll(currState) {
         this.setState({isRemoveAll: currState});
@@ -385,12 +387,10 @@ class AllContent extends React.Component {
     render() {
       return (
         <div>
-        <ModalWin isShow={this.state.showModal} onGetNewItem={(imgStr, priceStr, nameStr) => 
-            { this.childGridElems.GetNewItem(imgStr, priceStr, nameStr); }}/>
+            <ModalWin isShow={this.state.showModal} onClose={this.handleAddItem}
+            onGetNewItem={(imgStr, priceStr, nameStr) => { this.childGridElems.GetNewItem(imgStr, priceStr, nameStr); }}/>
             <NavBarBS onAddItem={this.handleAddItem} onChangeisEdit={this.handleisEdit} onRemoveAll={this.RemoveAll} />
-            <GridElems ref={instance => { this.childGridElems = instance; }}
-             isEdit={this.state.isEdit} 
-             isRemoveAll={this.state.isRemoveAll}/>
+            <GridElems ref={instance => { this.childGridElems = instance; }} isEdit={this.state.isEdit} isRemoveAll={this.state.isRemoveAll}/>
         </div>
       );
     }
