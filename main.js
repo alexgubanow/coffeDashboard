@@ -1,3 +1,6 @@
+
+var Modal = ReactBootstrap.Modal;
+var Button = ReactBootstrap.Button;
 /*trying to revive it*/
 var TestItems = 
 [
@@ -38,8 +41,90 @@ var TestItems =
         name : "Caffe Breve"
     }
 ];
+class ModalWin extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClickSave = this.handleClickSave.bind(this); 
+    this.handleClickClose = this.handleClickClose.bind(this); 
+    this.state = {
+        isShow: this.props.isShow,
+        imageInputValue: "",
+        priceInputValue : "",
+        nameInputValue : ""
+      };
+  }
+  componentWillReceiveProps(newProps) {
+    this.setState({isShow : newProps.isShow});
+  }
 
-class Buttons extends React.Component {
+  handleClickSave(e)
+  {
+      this.props.onGetNewItem(this.state.imageInputValue,this.state.priceInputValue,this.state.nameInputValue);
+      this.setState( { 
+          imageInputValue: "",
+          priceInputValue : "",
+          nameInputValue : "",
+          isShow : false
+       } );
+      
+  }
+  handleClickClose()
+  {
+      this.setState({isShow : false});
+  }
+  handleimageInputAddItem(e)
+  {
+      this.setState( { 
+          imageInputValue: e.target.value
+       } );
+       
+  }
+  handlepriceInputAddItem(e)
+  {
+      this.setState( { 
+          priceInputValue: e.target.value
+       } );
+       
+  }
+  handlenameInputAddItem(e)
+  {
+      this.setState( { 
+          nameInputValue: e.target.value
+       } );
+       
+  }
+  render() {
+    return (
+        <Modal show={this.state.isShow}>
+          <Modal.Header>
+            <Modal.Title>Add new coffee</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <div className="form-group">
+            <label htmlFor="imageInputAddItem">Url To Image</label>
+              <input id="imageInputAddItem" type="text" className="form-control" value={this.state.imageInputValue}
+              onChange={el => this.handleimageInputAddItem(el)}/>
+          </div>
+          <div className="form-group">
+          <label htmlFor="priceInputAddItem">Price</label>
+              <input id="priceInputAddItem" type="text" className="form-control" value={this.state.priceInputValue}
+              onChange={el => this.handlepriceInputAddItem(el)}/>
+          </div>
+          <div className="form-group">
+              <label htmlFor="nameInputAddItem">Name</label>
+              <input id="nameInputAddItem" type="text" className="form-control" value={this.state.nameInputValue}
+              onChange={el => this.handlenameInputAddItem(el)}/>
+          </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleClickClose}>Close</Button>
+            <Button onClick={this.handleClickSave}>Save</Button>
+          </Modal.Footer>
+        </Modal>
+    );
+  }
+}
+class NavBarBS extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -78,6 +163,10 @@ class Buttons extends React.Component {
     {
         this.props.onRemoveAll(true);
     }
+    handleClickAddItem(e)
+    {
+        this.props.onAddItem(true);
+    }
     handleClickLoadTestButton(e)
     {
         window.sessionStorage.clear();
@@ -85,6 +174,7 @@ class Buttons extends React.Component {
     }
    render() {
        return (
+        <nav className="navbar navbar-default">
         <div className="container-fluid">
         <button type="button" id="EditButton"  style={{'marginRight': '5px'}}
         className={this.state.EditButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
@@ -94,9 +184,9 @@ class Buttons extends React.Component {
         className={this.state.DoneButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
         onClick={el => this.handleClickDoneButton(el)}>Done</button>
 
-        <button type="button" id="AddItemButton"  style={{'marginRight': '5px'}}  data-toggle="modal" data-target="#AddItemFormModal"
+        <button type="button" id="AddItemButton"  style={{'marginRight': '5px'}}
         className={this.state.AddItemButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
-        >Add</button>
+        onClick={el => this.handleClickAddItem(el)}>Add</button>
 
         <button type="button" id="RemoveAllButton"  style={{'marginRight': '5px'}}
         className={this.state.RemoveAllButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
@@ -106,96 +196,11 @@ class Buttons extends React.Component {
         className={this.state.LoadTestButtonIsEnable ? "btn btn-default navbar-btn" :"btn btn-default navbar-btn hidden"} 
         onClick={el => this.handleClickLoadTestButton(el)}>Load test arr</button>
         </div>
+        </nav>
     );
    }
   }
 
-  class AddItemForm extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        imageInputValue: "",
-        priceInputValue : "",
-        nameInputValue : ""
-      };
-    }
-
-    handleClickSaveButton(e)
-    {
-        this.props.onGetNewItem(this.state.imageInputValue,this.state.priceInputValue,this.state.nameInputValue);
-        this.setState( { 
-            imageInputValue: "",
-            priceInputValue : "",
-            nameInputValue : ""
-         } );
-        $('#AddItemFormModal').modal('hide');
-    }
-    handleimageInputAddItem(e)
-    {
-        this.setState( { 
-            imageInputValue: e.target.value
-         } );
-         
-    }
-    handlepriceInputAddItem(e)
-    {
-        this.setState( { 
-            priceInputValue: e.target.value
-         } );
-         
-    }
-    handlenameInputAddItem(e)
-    {
-        this.setState( { 
-            nameInputValue: e.target.value
-         } );
-         
-    }
-    render() {
-       return (
-        <div id="AddItemFormModal" className={"modal fade"}>
-        <div className="modal-dialog">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 className="modal-title">Add new coffee</h4>
-                </div>
-                <div className="modal-body">
-                <ul className="list-unstyled">
-                <li>
-                    <div className="input-group">
-                        <span className="input-group-addon">url to image</span>
-                        <input id="imageInputAddItem" type="text" className="form-control" value={this.state.imageInputValue}
-                        onChange={el => this.handleimageInputAddItem(el)}/>
-                    </div>
-                </li>
-                <li>
-                    <div className="input-group">
-                        <span className="input-group-addon">price</span>
-                        <input id="priceInputAddItem" type="text" className="form-control" value={this.state.priceInputValue}
-                        onChange={el => this.handlepriceInputAddItem(el)}/>
-                    </div>
-                </li>
-                <li>
-                    <div className="input-group">
-                        <span className="input-group-addon">name</span>
-                        <input id="nameInputAddItem" type="text" className="form-control" value={this.state.nameInputValue}
-                        onChange={el => this.handlenameInputAddItem(el)}/>
-                    </div>
-                </li>
-                </ul>
-                </div>
-                <div className="modal-footer">
-                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-primary" 
-                    onClick={el => this.handleClickSaveButton(el)}>Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    );
-   }
-  }
   class GridElem extends React.Component {
     constructor(props) {
       super(props);
@@ -357,15 +362,21 @@ class AllContent extends React.Component {
     constructor(props) {
       super(props);
       this.handleisEdit = this.handleisEdit.bind(this);
+      this.handleAddItem = this.handleAddItem.bind(this);
       this.RemoveAll = this.RemoveAll.bind(this);
       this.state = {
         isEdit: false,
+        showModal: false,
         isRemoveAll: false
         };
     }
 
     handleisEdit(currState) {
-      this.setState({isEdit: currState});
+        this.setState({isEdit: currState});
+    }
+    handleAddItem(currState) {
+        this.setState({showModal: currState});
+        console.log("showModal " + this.state.showModal);
     }
     RemoveAll(currState) {
         this.setState({isRemoveAll: currState});
@@ -374,12 +385,9 @@ class AllContent extends React.Component {
     render() {
       return (
         <div>
-        <input id="fileInput" type="file"  className="hidden" />
-        <AddItemForm onGetNewItem={(imgStr, priceStr, nameStr) => 
-            { this.childGridElems.GetNewItem(imgStr, priceStr, nameStr); }} />
-            <nav className="navbar navbar-default">
-                <Buttons onChangeisEdit={this.handleisEdit} onRemoveAll={this.RemoveAll} />
-            </nav>
+        <ModalWin isShow={this.state.showModal} onGetNewItem={(imgStr, priceStr, nameStr) => 
+            { this.childGridElems.GetNewItem(imgStr, priceStr, nameStr); }}/>
+            <NavBarBS onAddItem={this.handleAddItem} onChangeisEdit={this.handleisEdit} onRemoveAll={this.RemoveAll} />
             <GridElems ref={instance => { this.childGridElems = instance; }}
              isEdit={this.state.isEdit} 
              isRemoveAll={this.state.isRemoveAll}/>
