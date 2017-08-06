@@ -1,4 +1,3 @@
-
 var Modal = ReactBootstrap.Modal;
 /*trying to revive it*/
 var TestItems = 
